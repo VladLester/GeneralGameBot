@@ -2,6 +2,7 @@
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using System.IO;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace GeneralGameBot
 {
@@ -22,19 +23,24 @@ namespace GeneralGameBot
                     try
                     {
                         
-                        await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\Users\xlegolazxx\Desktop\general.txt"));
+                        await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\general.txt"));
                     }
                     catch(Exception exc)
                     {
+                       
 
                         Console.WriteLine(exc.Message);
                     }
+                }
+                if (msg.Text == "Информация про генерала")
+                {
+                    await client.SendPhotoAsync(chatId: msg.Chat.Id, MessageHandler.DefaultGeneralPhotoUrl,caption: "Его хп: 100" ,replyMarkup: TelegramButtons.GetButtons());
                 }
 
             };
             Console.ReadLine();
         }
 
-       
+        
     }
 }
