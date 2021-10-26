@@ -23,7 +23,7 @@ namespace GeneralGameBot
                     try
                     {
                         
-                        await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\general.txt"));
+                        await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\GeneralGameStartMessage.txt"));
                     }
                     catch(Exception exc)
                     {
