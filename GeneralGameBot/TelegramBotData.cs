@@ -11,6 +11,8 @@ namespace GeneralGameBot
     static class TelegramBotData
     {
         public static readonly string token = File.ReadAllText(@"C:\GeneralGameBot\BotInfo.txt");
+
+
         
 
     }

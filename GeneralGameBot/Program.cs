@@ -17,29 +17,41 @@ namespace GeneralGameBot
             client.OnMessage += async(object sender, MessageEventArgs e) => 
             {
                 var msg = e.Message;
-
-                if (msg.Text != "Информация про генерала" && msg.Text != "Правила генеральской битвы" )
+               
+                if (msg.Text == "/start")
                 {
-                    try
-                    {
-                        
-                        await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\GeneralGameStartMessage.txt"));
-                    }
-                    catch(Exception exc)
-                    {
-                       
-
-                        Console.WriteLine(exc.Message);
-                    }
+                    await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\GeneralGameStartMessage.txt"));
                 }
                 if (msg.Text == "Информация про генерала")
                 {
-                    await client.SendPhotoAsync(chatId: msg.Chat.Id, MessageHandler.DefaultGeneralPhotoUrl,caption: "Его хп: 100" ,replyMarkup: TelegramButtons.GetButtons());
-                }
+                    try
+                    {
+                        using (AppContext context = new AppContext())
+                        {
+                            if (GameDataBase.DataBaseContains(msg.From.Username) == false)
+                            {
 
+                                GameDataBase.DataBaseAdd(GameDataBase.GeneralCreate(msg?.From.Username));                             
+                                await client.SendPhotoAsync(chatId: msg.Chat.Id, MessageHandler.DefaultGeneralPhotoUrl, caption: "Это ваш первый генерал\nЕго хп: 100", replyMarkup: TelegramButtons.GetButtons());
+                            }
+                            else 
+                            {
+                                await client.SendPhotoAsync(chatId: msg.Chat.Id, MessageHandler.DefaultGeneralPhotoUrl, caption: "У вас уже есть генерал\nЕго хп: 100", replyMarkup: TelegramButtons.GetButtons());
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                
             };
             Console.ReadLine();
         }
+
+
 
         
     }
