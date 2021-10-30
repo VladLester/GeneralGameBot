@@ -13,7 +13,7 @@ namespace GeneralGameBot
         public DbSet<Entities.General> Generals { get; set; }
         public AppContext()
         {
-            Database.EnsureDeleted();//!!!!! удалить для тестов по загрузке или запуске в паблик !!!!
+           
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

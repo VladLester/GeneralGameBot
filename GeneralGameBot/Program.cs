@@ -20,7 +20,8 @@ namespace GeneralGameBot
                
                 if (msg.Text == "/start")
                 {
-                    await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\GeneralGameStartMessage.txt"));
+
+                    await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\GeneralGameStartMessage.txt"), replyMarkup: TelegramButtons.GetButtons());
                 }
                 if (msg.Text == "Информация про генерала")
                 {
@@ -33,6 +34,7 @@ namespace GeneralGameBot
 
                                 GameDataBase.DataBaseAdd(GameDataBase.GeneralCreate(msg?.From.Username));                             
                                 await client.SendPhotoAsync(chatId: msg.Chat.Id, MessageHandler.DefaultGeneralPhotoUrl, caption: "Это ваш первый генерал\nЕго хп: 100", replyMarkup: TelegramButtons.GetButtons());
+                                
                             }
                             else 
                             {

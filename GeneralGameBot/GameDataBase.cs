@@ -21,8 +21,6 @@ namespace GeneralGameBot
                     }
                 }
             }
-
-
             return false;
         }
 
