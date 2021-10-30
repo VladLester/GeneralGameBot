@@ -41,7 +41,7 @@ namespace GeneralGameBot
                             else 
                             {
                                 general = GameDataBase.GetGeneral(msg.From.Username);
-                                await client.SendPhotoAsync(chatId: msg.Chat.Id, general.PhotoUrl, caption: $"У вас уже есть генерал\nЕго хп: {general.HP}", replyMarkup: TelegramButtons.GetButtons());
+                                await client.SendPhotoAsync(chatId: msg.Chat.Id, general.PhotoUrl, caption: $"Информация про генерала\nЕго хп: {general.HP}\nЕго имя: {general.Name} ", replyMarkup: TelegramButtons.GetButtons());
                             }
                         }
                     }
@@ -50,6 +50,13 @@ namespace GeneralGameBot
 
                         Console.WriteLine(ex.Message);
                     }
+                }
+                if (msg.Text.StartsWith("Имя:"))
+                {
+                    Console.WriteLine(msg.Text);
+                    general = GameDataBase.GetGeneral(msg.From.Username);
+                    MessageHandler.ChangeName(general, msg.Text);
+                    await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Вы поменяли имя генералу", replyMarkup: TelegramButtons.GetButtons());
                 }
                 
             };
