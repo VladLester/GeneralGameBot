@@ -9,7 +9,9 @@ namespace GeneralGameBot
     class Program
     {
         public static TelegramBotClient client { get; private set; }
-       
+        private static Entities.General general;
+
+
         static void Main(string[] args)
         {
             client = new TelegramBotClient(TelegramBotData.token);
@@ -38,7 +40,8 @@ namespace GeneralGameBot
                             }
                             else 
                             {
-                                await client.SendPhotoAsync(chatId: msg.Chat.Id, MessageHandler.DefaultGeneralPhotoUrl, caption: "У вас уже есть генерал\nЕго хп: 100", replyMarkup: TelegramButtons.GetButtons());
+                                general = GameDataBase.GetGeneral(msg.From.Username);
+                                await client.SendPhotoAsync(chatId: msg.Chat.Id, general.PhotoUrl, caption: $"У вас уже есть генерал\nЕго хп: {general.HP}", replyMarkup: TelegramButtons.GetButtons());
                             }
                         }
                     }

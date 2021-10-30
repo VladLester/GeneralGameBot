@@ -50,5 +50,22 @@ namespace GeneralGameBot
 
 
         }
+
+        public static Entities.General GetGeneral(string username)
+        {
+            using (AppContext context = new AppContext())
+            {
+                foreach (var item in context.Generals)
+                {
+                    if (item.TUsername == username)
+                    {
+                        return item;
+                    }
+                }
+            }
+
+            return null;
+            
+        }
     }
 }
