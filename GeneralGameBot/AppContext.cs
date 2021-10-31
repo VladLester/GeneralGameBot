@@ -10,10 +10,11 @@ namespace GeneralGameBot
 {
     class AppContext:DbContext
     {
-        public DbSet<Entities.General> Generals { get; set; }
+        public DbSet<General> Generals { get; set; }
+        //public DbSet<Stats> Stats { get; set; }
         public AppContext()
         {
-           
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
