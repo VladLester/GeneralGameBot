@@ -42,7 +42,7 @@ namespace GeneralGameBot
                             else
                             {
                                 general = GameDataBase.GetGeneral(msg.From.Username);
-                                await client.SendPhotoAsync(chatId: msg.Chat.Id, general.PhotoUrl, caption: $"Информация про генерала {msg.From.Username}\nЕго хп: {general.HP}\nЕго имя: {general.Name}\nДата создания Генерала {general.DateOfCreating} ", replyMarkup: TelegramButtons.GetButtons());
+                                await client.SendPhotoAsync(chatId: msg.Chat.Id, general.PhotoUrl, caption: $"Информация про генерала {msg.From.Username}\nЕго хп: {general.HP}\nЕго имя: {general.Name}\nДата создания Генерала: {general.DateOfCreating} ", replyMarkup: TelegramButtons.GetButtons());
                             }
                         }
                     }
