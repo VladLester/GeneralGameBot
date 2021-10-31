@@ -52,6 +52,8 @@ namespace GeneralGameBot
             string anotherUsername = message.Replace("Генерал другого человека:", "");
             return GameDataBase.GetGeneral(anotherUsername);
         }
+        
+       
     }
 
 
