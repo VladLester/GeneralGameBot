@@ -26,6 +26,7 @@ namespace GeneralGameBot
 
                     await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\GeneralGameStartMessage.txt"), replyMarkup: TelegramButtons.GetButtons());
                 }
+                #region InformationAboutGeneral
                 if (msg.Text == "Информация про генерала")
                 {
                     try
@@ -52,10 +53,18 @@ namespace GeneralGameBot
                         Console.WriteLine(ex.Message);
                     }
                 }
+                #endregion
+                
+                
                 if (msg.Text == "О боте")
                 {
                     await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\GameInformation.txt"));
                 }
+                else if (msg.Text == "Слава Аналу!")
+                {
+                    await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Генералу Аналу слава!", replyToMessageId:msg.MessageId);
+                }
+                #region Change GeneralName and Photo
                 try
                 {
                     if (msg.Text.StartsWith("Имя:"))
@@ -76,7 +85,9 @@ namespace GeneralGameBot
 
                     Console.WriteLine(ex.Message);
                 }
-
+                #endregion
+                
+                #region AnotherGeneral
                 try
                 {
                     if (msg.Text.StartsWith("Генерал другого человека:"))
@@ -98,6 +109,9 @@ namespace GeneralGameBot
 
                     Console.WriteLine(ex.Message);
                 }
+                #endregion
+                
+                #region Duel
                 try
                 {
                     if (msg.Text.StartsWith("Дуэль:"))
@@ -148,9 +162,9 @@ namespace GeneralGameBot
                 catch (Exception ex)
                 {
 
-                    Console.WriteLine(ex.Message);
+                    await client.SendTextMessageAsync(msg.Chat.Id, "Такого генерала не существует", replyToMessageId: msg.MessageId);
                 }
-
+                #endregion
 
 
 
