@@ -166,9 +166,21 @@ namespace GeneralGameBot
                     await client.SendTextMessageAsync(msg.Chat.Id, "Такого генерала не существует", replyToMessageId: msg.MessageId);
                 }
                 #endregion
+                try
+                {
+                    if (msg.Text == "Навыки")
+                    {
+                        general = GameDataBase.GetGeneral(msg.From.Username);
+                        await client.SendTextMessageAsync(chatId: msg.Chat.Id, $"{general.Stats.Stamina} - Стамина Генерала\n{general.Stats.Strength} - Сила Генерала\n{general.Stats.Tactics} - Тактика Генерала", replyMarkup: TelegramButtons.StatsButtons());
+                    }
 
+                }
+                catch (Exception ex)
+                {
 
-
+                    Console.WriteLine(ex.Message);
+                }
+                
             };        
          Console.ReadLine();
         }

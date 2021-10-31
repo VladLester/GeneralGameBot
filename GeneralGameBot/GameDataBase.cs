@@ -45,7 +45,7 @@ namespace GeneralGameBot
         public static Entities.General GeneralCreate(string username)
         {
             
-            Entities.General general = new Entities.General() { TUsername = username };
+            Entities.General general = new Entities.General() { TUsername = username, Stats = new Entities.Stats() };
             return general;
 
 

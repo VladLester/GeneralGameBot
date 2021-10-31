@@ -8,6 +8,7 @@ namespace GeneralGameBot.Entities
 {
     public class Stats
     {
+        public Entities.General General { get; set; }
         public int Id { get; set; }
         public int Strength { get; set; }
         public int Tactics { get; set; }
