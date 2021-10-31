@@ -134,6 +134,7 @@ namespace GeneralGameBot
                                 int SecondGeneralDice = rdm.Next(0, 6);
 
                                 await client.SendTextMessageAsync(msg.Chat.Id, $"Генерал с именем {general1.Name} кидает кости и получает {FirstGeneralDice}");
+                                
                                 await client.SendTextMessageAsync(msg.Chat.Id, $"Генерал с именем {general2.Name} кидает кости и получает {SecondGeneralDice}");
 
                                 if (FirstGeneralDice < SecondGeneralDice)
