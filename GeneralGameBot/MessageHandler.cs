@@ -12,17 +12,46 @@ namespace GeneralGameBot
 
         public static void ChangeName(Entities.General general,string message)
         {
-            using (AppContext context = new AppContext())
+            try
             {
-                string NewName = message.Replace("Имя:", " ");
-                context.Update(general);
-                general.Name = NewName;
-                context.SaveChanges();
+                using (AppContext context = new AppContext())
+                {
+                    string NewName = message.Replace("Имя:", "");
+                    context.Update(general);
+                    general.Name = NewName;
+                    context.SaveChanges();
+                }
             }
-          
-            
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }           
+        }
+        public static void ChangePhoto(Entities.General general, string message)
+        {
+            try
+            {
+                using (AppContext context = new AppContext())
+                {
+                    string NewPhotoUrl = message.Replace("Фото:", "");
+                    context.Update(general);
+                    general.PhotoUrl = NewPhotoUrl;
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message); 
+            }     
         }
         
+        public static Entities.General AnotherGeneralInfo(string message)
+        {
+            string anotherUsername = message.Replace("Генерал другого человека:", "");
+            return GameDataBase.GetGeneral(anotherUsername);
+        }
     }
 
 
