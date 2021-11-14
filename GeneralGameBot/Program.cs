@@ -141,7 +141,9 @@ namespace GeneralGameBot
                                 {
                                     await client.SendTextMessageAsync(msg.Chat.Id, $"Победил генерал {general2.Name}, первый генерал получает минус одно очко здоровья");
                                     context.Update(general1);
+                                    context.Update(general2);
                                     general1.HP -= 1;
+                                    general2.Exp += 1;
                                     context.SaveChanges();
                                 }
                                 else if (FirstGeneralDice == SecondGeneralDice)
@@ -152,6 +154,8 @@ namespace GeneralGameBot
                                 {
                                     await client.SendTextMessageAsync(msg.Chat.Id, $"Победил генерал {general1.Name}, второй генерал получает минус одно очко здоровья");
                                     context.Update(general2);
+                                    context.Update(general1);
+                                    general1.Exp += 1;
                                     general2.HP -= 1;
                                     context.SaveChanges();
                                 }
@@ -166,13 +170,49 @@ namespace GeneralGameBot
                     await client.SendTextMessageAsync(msg.Chat.Id, "Такого генерала не существует", replyToMessageId: msg.MessageId);
                 }
                 #endregion
+
+
+                #region Stats 
                 try
                 {
                     if (msg.Text == "Навыки")
+                {
+                        using (AppContext db = new AppContext())
+                        {
+                            Entities.Stats stats = db.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
+                            general = GameDataBase.GetGeneral(msg.From.Username);
+                            await client.SendTextMessageAsync(chatId: msg.Chat.Id, $"{stats.Stamina} - Стамина Генерала\n{stats.Strength} - Сила Генерала\n{stats.Tactics} - Тактика Генерала,\nВаша Експа {general.Exp}", replyMarkup: TelegramButtons.StatsButtons());
+                            
+                        }
+
+
+                    }
+                    else if (msg.Text == "Назад")
+                    {
+                        await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Возвращение на начальный экран", replyMarkup: TelegramButtons.GetButtons());
+                    }
+                    else if (msg.Text == "Качнуть силу")
                     {
                         general = GameDataBase.GetGeneral(msg.From.Username);
-                        await client.SendTextMessageAsync(chatId: msg.Chat.Id, $"{general.Stats.Stamina} - Стамина Генерала\n{general.Stats.Strength} - Сила Генерала\n{general.Stats.Tactics} - Тактика Генерала", replyMarkup: TelegramButtons.StatsButtons());
+                        
+                        if (general.Exp != 0)
+                        {
+                            using (AppContext db = new AppContext())
+                            {
+                                Entities.Stats stats = db.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
+                                db.Update(general);
+                                general.Exp -= 1;
+                                stats.Strength += 1;
+                                db.SaveChanges();
+                                
+                            }
+                        }
+                        else
+                        {
+                            await client.SendTextMessageAsync(chatId: msg.Chat.Id, "У вас нету опыта", replyToMessageId: msg.MessageId);
+                        }
                     }
+
 
                 }
                 catch (Exception ex)
@@ -180,7 +220,8 @@ namespace GeneralGameBot
 
                     Console.WriteLine(ex.Message);
                 }
-                
+                #endregion
+
             };        
          Console.ReadLine();
         }

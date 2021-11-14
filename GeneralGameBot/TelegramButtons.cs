@@ -26,7 +26,7 @@ namespace GeneralGameBot
             {
                 Keyboard = new List<List<KeyboardButton>>
                 {
-                    new List<KeyboardButton> {new KeyboardButton { Text = "Качнуть силу" } }
+                    new List<KeyboardButton> {new KeyboardButton { Text = "Качнуть силу" }, new KeyboardButton { Text = "Назад"} }
                 }
             };
         }

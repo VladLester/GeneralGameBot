@@ -45,7 +45,8 @@ namespace GeneralGameBot
         public static Entities.General GeneralCreate(string username)
         {
             
-            Entities.General general = new Entities.General() { TUsername = username, Stats = new Entities.Stats() };
+            
+            Entities.General general = new Entities.General() { TUsername = username, Stats = new Entities.Stats { Stamina = 1, Strength = 1,Tactics =1 } };
             return general;
 
 
@@ -55,6 +56,7 @@ namespace GeneralGameBot
         {
             using (AppContext context = new AppContext())
             {
+                
                 foreach (var item in context.Generals)
                 {
                     if (item.TUsername == username)
@@ -67,5 +69,7 @@ namespace GeneralGameBot
             return null;
             
         }
+
+        
     }
 }

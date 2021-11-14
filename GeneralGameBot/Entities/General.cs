@@ -16,5 +16,6 @@ namespace GeneralGameBot.Entities
         public string TUsername { get; set; }
         public DateTime DateOfCreating { get; set; }
         public Stats Stats { get; set; }
+        public int Exp { get; set; }
     }
 }
