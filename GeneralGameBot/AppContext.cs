@@ -16,6 +16,7 @@ namespace GeneralGameBot
         {
             
             Database.EnsureCreated();
+           
             
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

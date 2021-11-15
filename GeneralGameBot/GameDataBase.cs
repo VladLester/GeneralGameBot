@@ -43,11 +43,11 @@ namespace GeneralGameBot
             
         }
 
-        public static Entities.General GeneralCreate(string username)
+        public static Entities.General GeneralCreate(string username,long chatId)
         {
             
             
-            Entities.General general = new Entities.General() { TUsername = username, Stats = new Entities.Stats { Stamina = 1, Strength = 1,Tactics =1 } };
+            Entities.General general = new Entities.General() { TUsername = username, Stats = new Entities.Stats { Stamina = 1, Strength = 1,Tactics =1 }, ChatID = chatId};
             return general;
 
 

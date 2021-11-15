@@ -4,6 +4,7 @@ using Telegram.Bot.Args;
 using System.IO;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace GeneralGameBot
 {
@@ -17,6 +18,7 @@ namespace GeneralGameBot
         {
             client = new TelegramBotClient(TelegramBotData.token);
             client.StartReceiving();
+            Task.Run(() => GeneralAnthem());
             client.OnMessage += async (object sender, MessageEventArgs e) =>
             {
                 var msg = e.Message;
@@ -37,7 +39,7 @@ namespace GeneralGameBot
                             if (GameDataBase.DataBaseContains(msg.From.Username) == false)
                             {
 
-                                GameDataBase.DataBaseAdd(GameDataBase.GeneralCreate(msg?.From.Username));
+                                GameDataBase.DataBaseAdd(GameDataBase.GeneralCreate(msg?.From.Username, msg.Chat.Id));
                                 await client.SendPhotoAsync(chatId: msg.Chat.Id, MessageHandler.DefaultGeneralPhotoUrl, caption: $"Это ваш первый генерал {msg.From.Username}\nЕго хп: 100", replyMarkup: TelegramButtons.GetButtons());
 
                             }
@@ -60,11 +62,7 @@ namespace GeneralGameBot
                 if (msg.Text == "О боте")
                 {
                     await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\GameInformation.txt"));
-                }
-                else if (msg.Text == "Слава Аналу!")
-                {
-                    await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Генералу Аналу слава!", replyToMessageId: msg.MessageId);
-                }
+                }  
                 #region Change GeneralName and Photo
                 try
                 {
@@ -142,9 +140,9 @@ namespace GeneralGameBot
                                     await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Дуэль началась");
                                     if (general1.HP >= 0 && general2.HP >= 0)
                                     {
-                                        Thread.Sleep(5000);
+                                        Thread.Sleep(2000);
                                         AttackGeneralDamage = FightMechanics.GeneralHit(msg.Chat.Id, general1, general2, client, General1Stats, General2Stats);
-                                        Thread.Sleep(5000);
+                                        Thread.Sleep(2000);
                                         DefenseGeneralDamage = FightMechanics.GeneralHit(msg.Chat.Id, general2, general1, client, General2Stats, General1Stats);
                                         if (AttackGeneralDamage > DefenseGeneralDamage)
                                         {
@@ -196,7 +194,7 @@ namespace GeneralGameBot
                         {
                             Entities.Stats stats = db.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
                             general = GameDataBase.GetGeneral(msg.From.Username);
-                            await client.SendTextMessageAsync(chatId: msg.Chat.Id, $"{stats.Stamina} - Стамина Генерала\n{stats.Strength} - Сила Генерала\n{stats.Tactics} - Тактика Генерала,\nВаша Експа {general.Exp}", replyMarkup: TelegramButtons.StatsButtons());
+                            await client.SendTextMessageAsync(chatId: msg.Chat.Id, $"💪🏿{stats.Stamina} - Стамина Генерала\n👊🏿{stats.Strength} - Сила Генерала\n👺{stats.Tactics} - Тактика Генерала,\nВаша Експа {general.Exp}", replyMarkup: TelegramButtons.StatsButtons());
 
                         }
                     }
@@ -213,16 +211,19 @@ namespace GeneralGameBot
                                 Entities.Stats stats = db.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
                                 general = GameDataBase.GetGeneral(msg.From.Username);
                                 GameDataBase.StatsIncrement(msg.Chat.Id, client, general, stats, "Strength");
+                                await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Вы прокачали Strength");
                                 break;
                             case "Качнуть Тактику":
                                 Entities.Stats stats1 = db.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
                                 general = GameDataBase.GetGeneral(msg.From.Username);
                                 GameDataBase.StatsIncrement(msg.Chat.Id, client, general, stats1, "Tactics");
+                                await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Вы прокачали Tactics");
                                 break;
                             case "Качнуть Стамину":
                                 Entities.Stats stats2 = db.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
                                 general = GameDataBase.GetGeneral(msg.From.Username);
                                 GameDataBase.StatsIncrement(msg.Chat.Id, client, general, stats2, "Stamina");
+                                await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Вы прокачали Stamina");
                                 break;
 
 
@@ -240,7 +241,43 @@ namespace GeneralGameBot
          Console.ReadLine();
         }
 
+        static async void GeneralAnthem()
+        {
+            bool isTime = true;
+            while (true)
+            {
+                if (DateTime.Now.Hour == 8 || DateTime.Now.Hour == 21)
+                {
+                    if (isTime == true)
+                    {
+                        using (AppContext context = new AppContext())
+                        {
+                            foreach (var item in context.Generals)
+                            {
+                                try
+                                {
+                                    await client.SendTextMessageAsync(item.ChatID, File.ReadAllText(@"C:\GeneralGameBot\GeneralAnthem.txt"));
+                                }
+                                catch (Exception ex)
+                                {
 
+                                    Console.WriteLine(ex.Message);
+                                }
+                            }
+                        }
+                        isTime = false;
+                    }
+                   
+                }
+                else
+                {
+                    isTime = true;
+                }
+                Thread.Sleep(10000);
+
+            }
+            
+        }
 
 
 

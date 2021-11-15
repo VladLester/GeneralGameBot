@@ -27,15 +27,15 @@ namespace GeneralGameBot
 
         }
 
-        public  static int GeneralHit(long chatId, Entities.General AttackGeneral, Entities.General DefenceGeneral, TelegramBotClient client, Entities.Stats AttackGeneralStats, Entities.Stats DefenceGeneralStats)
+        public static int GeneralHit(long chatId, Entities.General AttackGeneral, Entities.General DefenceGeneral, TelegramBotClient client, Entities.Stats AttackGeneralStats, Entities.Stats DefenceGeneralStats)
         {
             using (AppContext context = new AppContext())
             {
                 Random rdm = new Random();
                 int Damage = 0;
-                Thread.Sleep(5000);
+                Thread.Sleep(2000);
                 client.SendTextMessageAsync(chatId: chatId, $"Удар генерала {AttackGeneral.Name}");
-                Thread.Sleep(5000);
+                Thread.Sleep(2000);
                 Damage = FightMechanics.DamageCalculate(AttackGeneralStats.Strength, DefenceGeneralStats.Tactics);
                 client.SendTextMessageAsync(chatId: chatId, $"Генерал {AttackGeneral.Name} попадает и наносит {Damage}");
                 context.Update(AttackGeneral);
