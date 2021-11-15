@@ -29,6 +29,31 @@ namespace GeneralGameBot
 
                     await client.SendTextMessageAsync(chatId: msg.Chat.Id, File.ReadAllText(@"C:\GeneralGameBot\GeneralGameStartMessage.txt"), replyMarkup: TelegramButtons.GetButtons());
                 }
+                else if (msg.Text == "Похоронить")
+                {
+                    var DeathGeneral = GameDataBase.GetGeneral(msg.From.Username);
+                    if (DeathGeneral.HP <= 0)
+                    {
+                        using (AppContext context = new AppContext())
+                        {
+                            await client.SendPhotoAsync(chatId: msg.Chat.Id, "https://memepedia.ru/wp-content/uploads/2019/09/7bf9f32d.jpg", "Ваш генерал был так молод и красив 😭");
+                            await client.SendAudioAsync(chatId: msg.Chat.Id, "https://rbmk.xyz/GeneralYmer.mp3");
+                            await client.SendTextMessageAsync(msg.Chat.Id, "Минута молчания....");
+                            Thread.Sleep(5000);
+                            context.Remove(DeathGeneral);
+                            context.SaveChanges();
+                            await client.SendPhotoAsync(chatId: msg.Chat.Id, "https://cdn.discordapp.com/attachments/566347121364828160/909766983044698163/b-6-t.jpg", "Ваш генерал был похоронен с почестями 😭");
+
+                        }
+                    }
+                    else
+                    {
+                        await client.SendTextMessageAsync(msg.Chat.Id, "Ты че ебанашка, твой генерал еще в расцвете сил! ", replyToMessageId: msg.MessageId);
+                    }
+                    
+                }
+
+
                 #region InformationAboutGeneral
                 if (msg.Text == "Информация про генерала")
                 {
@@ -57,6 +82,7 @@ namespace GeneralGameBot
                     }
                 }
                 #endregion
+
 
 
                 if (msg.Text == "О боте")
@@ -167,6 +193,10 @@ namespace GeneralGameBot
                                             general2.Exp += 1;
                                             context.SaveChanges();
                                         }
+                                    }
+                                    else
+                                    {
+                                        await client.SendTextMessageAsync(msg.Chat.Id, $"У кого-то из вас мертвый генерал");
                                     }
 
                                 }
