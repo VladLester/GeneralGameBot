@@ -84,16 +84,19 @@ namespace GeneralGameBot
                     if (UpdateStat == "Strength")
                     {
                         GeneralStats.Strength += 1;
+                        client.SendTextMessageAsync(chatId, "Вы прокачали Strength");
                         db.SaveChanges();
                     }
                     else if (UpdateStat == "Stamina")
                     {
                         GeneralStats.Stamina += 1;
+                        client.SendTextMessageAsync(chatId, "Вы прокачали Stamina");
                         db.SaveChanges();
                     }
                     else if(UpdateStat == "Tactics")
                     {
                         GeneralStats.Tactics += 1;
+                        client.SendTextMessageAsync(chatId, "Вы прокачали Tactics");
                         db.SaveChanges();
                     }
                     

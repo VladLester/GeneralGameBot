@@ -211,19 +211,16 @@ namespace GeneralGameBot
                                 Entities.Stats stats = db.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
                                 general = GameDataBase.GetGeneral(msg.From.Username);
                                 GameDataBase.StatsIncrement(msg.Chat.Id, client, general, stats, "Strength");
-                                await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Вы прокачали Strength");
                                 break;
                             case "Качнуть Тактику":
                                 Entities.Stats stats1 = db.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
                                 general = GameDataBase.GetGeneral(msg.From.Username);
                                 GameDataBase.StatsIncrement(msg.Chat.Id, client, general, stats1, "Tactics");
-                                await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Вы прокачали Tactics");
                                 break;
                             case "Качнуть Стамину":
                                 Entities.Stats stats2 = db.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
                                 general = GameDataBase.GetGeneral(msg.From.Username);
                                 GameDataBase.StatsIncrement(msg.Chat.Id, client, general, stats2, "Stamina");
-                                await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Вы прокачали Stamina");
                                 break;
 
 
