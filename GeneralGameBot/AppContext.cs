@@ -14,6 +14,7 @@ namespace GeneralGameBot
         public DbSet<Stats> Stats { get; set; }
         public AppContext()
         {
+
             Database.EnsureCreated();
             
            
@@ -29,6 +30,8 @@ namespace GeneralGameBot
             modelBuilder.Entity<General>().Property(g => g.PhotoUrl).HasDefaultValue("https://images-ext-2.discordapp.net/external/B9sqm34yAAxLcvvs6u5ctDWVzKBiCLMZ0o-eWWaqVJ8/https/upload.wikimedia.org/wikipedia/commons/thumb/9/98/Stalin_in_March_1935.jpg/1200px-Stalin_in_March_1935.jpg?width=998&height=657");
             modelBuilder.Entity<General>().Property(g => g.DateOfCreating).HasDefaultValueSql("GETDATE()");
             modelBuilder.Entity<General>().Property(g => g.Exp).HasDefaultValue(0);
+            modelBuilder.Entity<General>().Property(g => g.maxHpAmount).HasDefaultValue(100);
+            modelBuilder.Entity<General>().Property(g => g.HpRestorationTime).HasDefaultValue(DateTime.Now);
             //modelBuilder.Entity<General>().Property(g => g.Stats).HasDefaultValue(new Stats());
             //modelBuilder.Entity<Stats>().Property(s => s.Strength).HasDefaultValue(1);
             //modelBuilder.Entity<Stats>().Property(s => s.Stamina).HasDefaultValue(1);

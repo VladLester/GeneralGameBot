@@ -14,16 +14,19 @@ namespace GeneralGameBot
         private static Entities.General general;
 
 
+
         static void Main(string[] args)
         {
             client = new TelegramBotClient(TelegramBotData.token);
             client.StartReceiving();
             Task.Run(() => GeneralAnthem());
+            
             client.OnMessage += async (object sender, MessageEventArgs e) =>
             {
+                
                 var msg = e.Message;
+                Task.Run(() => HpRestoration(GameDataBase.GetGeneral(msg.From.Username)));
                 string FightCall = "";
-
                 if (msg.Text == "/start")
                 {
 
@@ -157,9 +160,9 @@ namespace GeneralGameBot
                                 Entities.Stats General2Stats = context.Stats.Find(GameDataBase.GetGeneral(FightCall).Id);
                                 int AttackGeneralDamage = 0;
                                 int DefenseGeneralDamage = 0;
-                                if (general2.Name == null)
+                                if (general2.Name == null || general1.Name == null)
                                 {
-                                    await client.SendTextMessageAsync(msg.Chat.Id, $"Дай имя своему генералу а потом уже дерись");
+                                    await client.SendTextMessageAsync(msg.Chat.Id, $"У кого-то из дуэлянтов нету имени, проверьте и дайте имя генералу");
 
                                 }
                                 else
@@ -326,6 +329,39 @@ namespace GeneralGameBot
             
         }
 
+        static async void HpRestoration(Entities.General general)
+        {
+            try
+            {
+                using (AppContext context = new AppContext())
+                {
+                    while (true)
+                    {
+                        if (DateTime.Now >= general.HpRestorationTime.AddMinutes(20))
+                        {
+                            if (general.HP != general.maxHpAmount)
+                            {
+                                context.Update(general);
+                                general.HP += general.maxHpAmount - general.HP;
+                                general.HpRestorationTime = DateTime.Now;
+                                context.SaveChanges();
+                            }
+                        }
+
+
+                        Thread.Sleep(10000);
+                    }
+                }
+               
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+           
+           
+        }
 
 
     }

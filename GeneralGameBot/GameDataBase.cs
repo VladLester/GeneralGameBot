@@ -90,6 +90,7 @@ namespace GeneralGameBot
                     else if (UpdateStat == "Stamina")
                     {
                         GeneralStats.Stamina += 1;
+                        general.maxHpAmount += 5;
                         client.SendTextMessageAsync(chatId, "Вы прокачали Stamina");
                         db.SaveChanges();
                     }

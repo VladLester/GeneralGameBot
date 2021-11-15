@@ -19,6 +19,9 @@ namespace GeneralGameBot.Entities
         public int Exp { get; set; }
         public long ChatID { get; set; }
 
+        public int maxHpAmount { get; set; }
         public DateTime CoolDown { get; set; }
+
+        public DateTime HpRestorationTime { get; set; }
     }
 }
