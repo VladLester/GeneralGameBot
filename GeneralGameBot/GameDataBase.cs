@@ -83,12 +83,15 @@ namespace GeneralGameBot
                     db.SaveChanges();
                     if (UpdateStat == "Strength")
                     {
+                        db.Update(GeneralStats);
                         GeneralStats.Strength += 1;
                         client.SendTextMessageAsync(chatId, "Вы прокачали Strength");
                         db.SaveChanges();
                     }
                     else if (UpdateStat == "Stamina")
                     {
+                        db.Update(general);
+                        db.Update(GeneralStats);
                         GeneralStats.Stamina += 1;
                         general.maxHpAmount += 5;
                         client.SendTextMessageAsync(chatId, "Вы прокачали Stamina");
@@ -96,6 +99,7 @@ namespace GeneralGameBot
                     }
                     else if(UpdateStat == "Tactics")
                     {
+                        db.Update(GeneralStats);
                         GeneralStats.Tactics += 1;
                         client.SendTextMessageAsync(chatId, "Вы прокачали Tactics");
                         db.SaveChanges();
