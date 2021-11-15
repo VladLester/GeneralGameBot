@@ -18,5 +18,7 @@ namespace GeneralGameBot.Entities
         public Stats Stats { get; set; }
         public int Exp { get; set; }
         public long ChatID { get; set; }
+
+        public DateTime CoolDown { get; set; }
     }
 }

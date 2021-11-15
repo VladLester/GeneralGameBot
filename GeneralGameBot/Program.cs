@@ -150,6 +150,7 @@ namespace GeneralGameBot
                         {
                             using (AppContext context = new AppContext())
                             {
+                               
                                 Entities.General general1 = GameDataBase.GetGeneral(msg.From.Username);
                                 Entities.General general2 = GameDataBase.GetGeneral(FightCall);
                                 Entities.Stats General1Stats = context.Stats.Find(GameDataBase.GetGeneral(msg.From.Username).Id);
@@ -163,41 +164,60 @@ namespace GeneralGameBot
                                 }
                                 else
                                 {
-                                    await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Дуэль началась");
-                                    if (general1.HP >= 0 && general2.HP >= 0)
+                                    if (DateTime.Now >= general1.CoolDown.AddMinutes(10) && DateTime.Now >= general2.CoolDown.AddMinutes(10))
                                     {
-                                        Thread.Sleep(2000);
-                                        AttackGeneralDamage = FightMechanics.GeneralHit(msg.Chat.Id, general1, general2, client, General1Stats, General2Stats);
-                                        Thread.Sleep(2000);
-                                        DefenseGeneralDamage = FightMechanics.GeneralHit(msg.Chat.Id, general2, general1, client, General2Stats, General1Stats);
-                                        if (AttackGeneralDamage > DefenseGeneralDamage)
+                                        await client.SendTextMessageAsync(chatId: msg.Chat.Id, "Дуэль началась");
+                                        await client.SendTextMessageAsync(chatId: general2.ChatID, $"На вас напал {general1.Name}");
+                                        if (general1.HP >= 0 && general2.HP >= 0)
                                         {
-                                            await client.SendTextMessageAsync(msg.Chat.Id, $"Победа генерала {general1.Name}, + 3 exp");
+                                            Thread.Sleep(2000);
+                                            AttackGeneralDamage = FightMechanics.GeneralHit(msg.Chat.Id, general1, general2, client, General1Stats, General2Stats);
+                                            Thread.Sleep(2000);
+                                            DefenseGeneralDamage = FightMechanics.GeneralHit(msg.Chat.Id, general2, general1, client, General2Stats, General1Stats);
+                                            if (AttackGeneralDamage > DefenseGeneralDamage)
+                                            {
+                                                await client.SendTextMessageAsync(msg.Chat.Id, $"Победа генерала {general1.Name}, + 3 exp");
+                                                await client.SendTextMessageAsync(general2.ChatID, $"Победа генерала {general1.Name}, + 3 exp");
+                                                context.Update(general1);
+                                                general1.Exp += 3;
+                                                context.SaveChanges();
+                                            }
+                                            else if (AttackGeneralDamage < DefenseGeneralDamage)
+                                            {
+                                                await client.SendTextMessageAsync(msg.Chat.Id, $"Победа генерала {general2.Name}, + 3 exp");
+                                                await client.SendTextMessageAsync(general2.ChatID, $"Победа генерала {general2.Name}, + 3 exp");
+                                                context.Update(general2);
+                                                general2.Exp += 3;
+                                                context.SaveChanges();
+                                            }
+                                            else
+                                            {
+                                                await client.SendTextMessageAsync(msg.Chat.Id, $"Ничья, все получают по 1 exp");
+                                                await client.SendTextMessageAsync(general2.ChatID, $"Ничья, все получают по 1 exp");
+                                                context.Update(general1);
+                                                context.Update(general2);
+                                                general1.Exp += 1;
+                                                general2.Exp += 1;
+                                                context.SaveChanges();
+                                            }
                                             context.Update(general1);
-                                            general1.Exp += 3;
-                                            context.SaveChanges();
-                                        }
-                                        else if (AttackGeneralDamage < DefenseGeneralDamage)
-                                        {
-                                            await client.SendTextMessageAsync(msg.Chat.Id, $"Победа генерала {general2.Name}, + 3 exp");
                                             context.Update(general2);
-                                            general2.Exp += 3;
+                                            general1.CoolDown = DateTime.Now;
+                                            general2.CoolDown = DateTime.Now;
                                             context.SaveChanges();
                                         }
                                         else
                                         {
-                                            await client.SendTextMessageAsync(msg.Chat.Id, $"Ничья, все получают по 1 exp");
-                                            context.Update(general1);
-                                            context.Update(general2);
-                                            general1.Exp += 1;
-                                            general2.Exp += 1;
-                                            context.SaveChanges();
+                                            await client.SendTextMessageAsync(msg.Chat.Id, $"У кого-то из вас мертвый генерал");
                                         }
+
+
                                     }
                                     else
                                     {
-                                        await client.SendTextMessageAsync(msg.Chat.Id, $"У кого-то из вас мертвый генерал");
+                                        await client.SendTextMessageAsync(msg.Chat.Id, $"Генерал устал ему нужно отдохнуть, кд закончится в {general1.CoolDown.AddMinutes(10)}");
                                     }
+                                    
 
                                 }
                             }

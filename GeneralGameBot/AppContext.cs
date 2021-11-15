@@ -14,8 +14,8 @@ namespace GeneralGameBot
         public DbSet<Stats> Stats { get; set; }
         public AppContext()
         {
-            
             Database.EnsureCreated();
+            
            
             
         }

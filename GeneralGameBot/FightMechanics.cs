@@ -34,10 +34,12 @@ namespace GeneralGameBot
                 Random rdm = new Random();
                 int Damage = 0;
                 Thread.Sleep(2000);
-                client.SendTextMessageAsync(chatId: chatId, $"Удар генерала {AttackGeneral.Name}");
+                client.SendTextMessageAsync(chatId: AttackGeneral.ChatID, $"Удар генерала {AttackGeneral.Name}");
+                client.SendTextMessageAsync(chatId: DefenceGeneral.ChatID, $"Удар генерала {AttackGeneral.Name}");
                 Thread.Sleep(2000);
                 Damage = FightMechanics.DamageCalculate(AttackGeneralStats.Strength, DefenceGeneralStats.Tactics);
-                client.SendTextMessageAsync(chatId: chatId, $"Генерал {AttackGeneral.Name} попадает и наносит {Damage}");
+                client.SendTextMessageAsync(chatId: AttackGeneral.ChatID, $"Генерал {AttackGeneral.Name} попадает и наносит {Damage}");
+                client.SendTextMessageAsync(chatId: DefenceGeneral.ChatID, $"Генерал {AttackGeneral.Name} попадает и наносит {Damage}");
                 context.Update(AttackGeneral);
                 context.Update(DefenceGeneral);
                 DefenceGeneral.HP -= Damage;
